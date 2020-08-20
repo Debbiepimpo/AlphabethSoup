@@ -51,7 +51,7 @@ def compareSoup(phrase, soup):
 
 	nPhrase = OrderedDict(sorted(phElem.items(), key=lambda t: t[1], reverse=True)) 
 	
-	lSoup = list(soup) #Maybe we can still using string
+	cSoup = Counter(soup)
 
 	result = 1
 	iterations = 0 # Index for number of tests made
@@ -61,9 +61,9 @@ def compareSoup(phrase, soup):
 
 	for x in nPhrase:
 		iterations +=1
-		if  lSoup.count(x) < phElem[x]:
+		if  cSoup[x] < phElem[x]:
 			result = 0
-			print("Not enougth '{}' letters. Have {}, {} needed.".format(x, lSoup.count(x), phElem[x]))
+			print("Not enougth '{}' letters. Have {}, {} needed.".format(x, cSoup[x], phElem[x]))
 			break
 
 	lp = len(phrase)
