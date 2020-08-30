@@ -42,54 +42,32 @@ def compareSoup(phrase, soup):
 		We use a list for soup.
 	"""
 	start_time = datetime.now()
-	
-	# Count char occurencies in phrase 
-	phElem = Counter(phrase)
-	
-	# Once dictionarys are unordered, covert it to a reversed rdered list.
-	# So, loop will exit soon by testing for bigger occurenciesm which are the ines that have most probability of failling
 
-	nPhrase = OrderedDict(sorted(phElem.items(), key=lambda t: t[1], reverse=True)) 
-	
-	cSoup = Counter(soup)
+	# We have to convert soup to list once strings are immutable
 
-	result = 1
-	iterations = 0 # Index for number of tests made
-
-	# Check if for any char have fewer occurencies in soup that in phrase
-	# We use a regular loop instead of a comprehension loop, so we can break it after the first negative match 
-
-	for x in nPhrase:
-		iterations +=1
-		if  cSoup[x] < phElem[x]:
-			result = 0
-			print("Not enougth '{}' letters. Have {}, {} needed.".format(x, cSoup[x], phElem[x]))
-			break
-
+	soup = list(soup)
 	lp = len(phrase)
 	ls = len(soup)
 
-	nlp = len(nPhrase)
-
 	"""
-		Big-O depends on:
-			- Number of char in phrase to map
-			- Number of char in mapped phrase, once it is the one that lead the comparation loop
-			- So, in this case we will have a O(n1), where n1 < n for n=#phsares 
-			- The efficiency of algorithm will increase with bigger datasets and when repetitions of char in them became more frequent.
-			- Will also deppend from the efficiency of counting method in list.count().
-			- For small datasets and low level of repetitions the method 1 (loop over list) will remain faster, once processing 
-			dictionaries are "heavier" than lists
-			- For really big datasets we will have to consider using better tools like Pandas or Spark. 
+		We check for every element of the phrase in soup.
+		If it fails, we know that have elements on phrase that are not in soup.
+		So we only process the number of elements in phrase, and count repeted elements
 	"""
 
-	print("\nLength of phrase (n): ", lp)
-	print("Length of soup (m): ", ls )
-	print("Count of individual char in phrase: (n1): ", nlp )
-	print("Big-O (n1 <= n [O(n1)]:", nlp )
-	print("# of iterations:", iterations )
+	result = 1
+
+	try:
+		[soup.remove(x) for x in phrase ]
+	except:
+		# remove failed, some element of Phrase are missing in soup
+		result = 0
 	
 	end_time = datetime.now()
+
+	print ("\nLength of phrase (n): ", lp)
+	print ("Length of soup (m): ", ls)
+	print ("Big-O [O(n*m)]:", lp*ls)
 
 	print("Start Time: ", start_time)
 	print("End Time: ", end_time)
